@@ -7,6 +7,8 @@ class AddGrocery extends React.Component {
             name: '',
             quantity: 0
         };
+        // Submit method works a bit differently
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChangeText(event) {
@@ -21,10 +23,10 @@ class AddGrocery extends React.Component {
         });
     }
 
-    handleChangeSubmit(event) {
+    handleSubmit(event) {
         // Stop page refresh, when clicking on submit
         event.preventDefault();
-        this.props.addGrocery({
+        this.props.addGrocery({  // Prop method from App.jsx
             name: this.state.name,
             quantity: this.state.quantity
         })
@@ -33,10 +35,10 @@ class AddGrocery extends React.Component {
     render() {
         return (
             // Refer to React's documentation on form
-            <form onSubmit={this.handleChangeSubmit}>
+            <form onSubmit={this.handleSubmit}>
                 <input type = 'text' onChange={this.handleChangeText.bind(this)}/>
                 <input type = 'number' onChange={this.handleChangeQuantity.bind(this)}/>
-                {/* <input type = 'submit' onSubmit={this.handleChangeSubmit.bind(this)}/> */}
+                {/* <input type = 'submit' onSubmit={this.handleSubmit.bind(this)}/> */}
                 <input type = 'submit'/>
 
             </form>

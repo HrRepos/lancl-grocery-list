@@ -10,12 +10,12 @@ const controllers = require('../database/index.js');
 // const getAllGroceries = require()
 
 // Use Express to fix CORS error (client via file, vs server via localhost)
-// Solution 1: add OPTION to server file (used in my sprint, W3S1)
 // Solution 2: use Express, to add static files (used below by Beth)
 // app.use(express.static(__dirname + '/../client/dist'));
 //app.use(express.static('/Users/huanl/Desktop/hrsf101-grocery-list/client/dist'));
 
-// Per Express's API
+// Solution 1: use Express to enable CORS (based on Express's API)
+// Similiar as adding OPTION to server file, using node.js (used in my sprint, W3S1)
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");

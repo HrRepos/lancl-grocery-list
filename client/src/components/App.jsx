@@ -26,29 +26,27 @@ class App extends React.Component{
             groceryList: []
             //grocery: groceries[0]
         }
-        this.addGroceryItem = this.addGroceryItem.bind(this);
+        this.addGroceryItem = this.addGroceryItem.bind(this);  // 'bind' can also happen here
     }
 
-    // Load ajax's server data, as part of the lifecycle
-    // [Todo] take getGroceries() out of this function
+    // Load ajax's server data, as part of the Reat lifecycle
+    // Functions below are hoisted here
     componentDidMount() {
-      // var success = function(data) {
-      //   this.setState({
-      //     groceryList: data
-      //   });
-      //   console.log('success with getting data')
-      // };
+      this.getGroceries();
+    }
+
+    getGroceries(){
+      //Alternative way to bind: use appInstance = this at the start of componentDidMount()
+      var success = function(data) {
+        this.setState({
+          groceryList: data
+        });
+        console.log('success with getting data')
+      };
       $.ajax({  // Use inner cb functions, for async Ajax
         url: 'http://localhost:3000/groceries',
         method: 'GET',  // Type does the same thing
-        // Alternative way to bind: use appInstance = this at the start of componentDidMount()
-        // success: success.bind(this),
-        success: function(data) {
-          this.setState({
-            groceryList: data
-          });
-          console.log('success with getting data')
-        }.bind(this),  // Hard-to-read way to using 'bind'
+        success: success.bind(this),  // Note: do not use 'success(data)' here
 
         error: function(err) {
           console.log('err', err)
@@ -56,29 +54,40 @@ class App extends React.Component{
       });
     }
 
-    // [Todo] finish this function, to post to the server
+    // Post/add data to the server
+    // Per jQuery's syntax
     addGroceryItem(item) {
       $.ajax({
         url: 'http://localhost:3000/groceries',
-        method: POST,
+        method: 'POST',
         contentType: 'application/JSON',
         data: JSON.stringify(item),
         success: () => {
           console.log('added item');
-          this.getGroceries();
+          this.getGroceries();  // If success, then invoke getGroceries() from above
         },
         error: () => {
-
+          console.log('err', err)
         }
       })
     }
 
+    // Note: React only returns 1 element (so no 2 <div></div>s)
     render() {
         return (
+            // <div>
+            //   <AddGrocery
+            //     groceryList={this.state.groceryList}
+            //   />
+            // </div>
             <div>
-                {/* <h5>Grocery List</h5> */}
+                <h5>Add Grocery</h5>
+                <AddGrocery
+                  addGrocery={this.addGroceryItem}
+                />
+                <h5>Grocery List</h5>
                 <GroceryList
-                groceryList={this.state.groceryList}
+                  groceryList={this.state.groceryList}
                 />
             </div>
         );
